@@ -1,37 +1,32 @@
 import os
 
-
 def generation_board(height, width): 
     board = []
     for i in range(height):
         board.append(['.'] * width)
     return board
 
-
 def print_board5_5(board):
-    a = 0
-    print('        A B C D E ')
+    char = 0
+    print('        1 2 3 4 5 ')
     print('        v v v v v ')
     print('       ___________')
     for element in board:
-        a += 1
-        b = str(a)
+        char += 1
         element = ' '.join(element)
-        print(b.rjust(2),"=>","|", element,"|")
+        print(chr(char + 64).rjust(2),"=>","|", element,"|")
     print('       -----------') 
     return board
 
-
 def print_board10_10(board):
-    a = 0
-    print('        A B C D E F G H I J')
+    char = 0
+    print('        1 2 3 4 5 6 7 8 9 10')
     print('        v v v v v v v v v v')
     print('       ____________________')
     for element in board:
-        a += 1
-        b = str(a)
+        char += 1
         element = ' '.join(element)
-        print(b.rjust(2),"=>","|", element,"|")
+        print(chr(char + 64).rjust(2),"=>","|", element,"|")
     print('       --------------------') 
 
 
@@ -65,7 +60,6 @@ def set_of_coordinates(row_selected, col_selected):
     col = options_to_choose[col_selected]
     return row, col
 
-
 def select_coordinates(board, row, col):
     cell_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
     row_selected = input("Select a cell ").upper()
@@ -75,9 +69,6 @@ def select_coordinates(board, row, col):
     else:
         print("Invalid input! You must select a cell on the board")
         select_coordinates(board, row, col)
-
-
-
 
 def shooting_phase(board, row, col,height,width):  # Vładek
     board_for_note_player_1 = generation_board(height,width)
