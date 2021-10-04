@@ -16,6 +16,7 @@ def print_board5_5(board):
         element = ' '.join(element)
         print(b.rjust(2),"=>","|", element,"|")
     print('       -----------') 
+    return board
 
 def print_board10_10(board):
     a = 0
@@ -45,7 +46,6 @@ def mark():  # Magda
 def clear():  # NIKT
     os.system('cls' if os.name == 'nt' else 'clear')
 
-
 def win():  # Magda
     pass
 
@@ -62,9 +62,11 @@ def battleship():
     pass
 
 def size_of_the_board():
+    print('    Select board size:\n')
     size = input('''    1 = Board size 5x5
-    2 = Board size 10x10
+    2 = Board size 10x10 \n
     Your choice: ''')
+    clear()
     if size == '1':
         board = generation_board(5,5)
         print_board5_5(board)
