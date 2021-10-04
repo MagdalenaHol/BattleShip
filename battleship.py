@@ -1,8 +1,11 @@
-def generation_board():  # Sebastian
-    pass
+import os
+def generation_board(height,width):  # Sebastian
+    board = []
+    for i in range(height):
+        board.append(['.'] * width)
+    return board
 
-
-def print_board():  # Sebastian
+def print_board(board):  # Sebastian
     pass
 
 
@@ -19,7 +22,7 @@ def mark():  # Magda
 
 
 def clear():  # NIKT
-    pass
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def win():  # Magda
@@ -39,4 +42,4 @@ def battleship():
 
 
 if __name__ == "__main__":
-    pass
+    print(generation_board(5,5))
