@@ -1,38 +1,42 @@
-def generation_board():
+def generation_board():  # Sebastian
     pass
 
 
-def print_board():
+def print_board():  # Sebastian
     pass
 
 
-def ai_player():
+def ai_player():  # Denys
     pass
 
 
-def player():
+def player():  # Denys
     pass
 
 
-def mark():
+def mark():  # Magda
     pass
 
 
-def clear():
+def clear():  # NIKT
     pass
 
 
-def win():
+def win():  # Magda
     pass
 
 
-def validate():
+def validate():  # Vładek
     pass
 
 
-def shooting_phase():
+def shooting_phase():  # Vładek
     pass
 
 
 def battleship():
+    pass
+
+
+if __name__ == "__main__":
     pass
