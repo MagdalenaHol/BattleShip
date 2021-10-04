@@ -1,12 +1,15 @@
 import os
-def generation_board(height,width):  # Sebastian
+def generation_board(height,width): 
     board = []
     for i in range(height):
         board.append(['.'] * width)
     return board
 
-def print_board(board):  # Sebastian
-    pass
+def print_board(board):
+    for element in board:
+        element = ' '.join(element)
+        print(element)
+        
 
 
 def ai_player():  # Denys
@@ -40,6 +43,9 @@ def shooting_phase():  # Vładek
 def battleship():
     pass
 
+def main_menu():
+    pass
 
 if __name__ == "__main__":
-    print(generation_board(5,5))
+    board = generation_board(5,5)
+    print_board(board)
