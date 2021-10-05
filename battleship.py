@@ -1,7 +1,6 @@
 import os
 import random
 
-
 def generation_board(size):
     board = []
     for i in range(size):
@@ -67,18 +66,75 @@ def select_coordinates():
         select_coordinates()
 
 
-def ask_for_ship(board):
-    for ship in range(5):
-        print("Enter your ships positions: ", ship + 1)
+def ask_for_single_ship(board):
+    single_ship = 3
+    for i in range(single_ship):
+        print("Deploy", single_ship, "single ships")
+        single_ship -= 1
+        print("Enter your ships positions: ")
         row_selected, col_selected = select_coordinates()
         if board[row_selected][col_selected] == "X":
-            print("This spot is occupied by batleship. Please spot again: ", ship + 1)
+            print("This spot is occupied by batleship. Please spot again: ")
+            ask_for_single_ship(board)
         else:
             board[row_selected][col_selected] = "X"
-            print(board)
-       
-def mark():  # Magda
-    pass
+            print_board(board_player_1,size)           
+
+def ask_for_double_ship(board):
+    double_ship = 2
+    for i in range(double_ship):
+        print("Deploy", double_ship, "double ships")
+        double_ship -= 1
+        print("Enter your ships positions: ")
+        row_selected, col_selected = select_coordinates()
+        if board[row_selected][col_selected] == "X":
+            print("This spot is occupied by batleship. Please spot again: ")
+            ask_for_double_ship(board)
+        else:
+            board[row_selected][col_selected] = "X"
+            print_board(board_player_1,size)
+
+def ask_for_triple_ship(board):  
+    triple_ship = 1
+    for i in range(triple_ship):
+        print('Deploy 1 single ship')
+        print("Enter your ships positions: ")
+        row_selected, col_selected = select_coordinates()
+        if board[row_selected][col_selected] == "X":
+            print("This spot is occupied by batleship. Please spot again: ")
+            ask_for_triple_ship(board)
+        else:
+            board[row_selected][col_selected] = "X"
+            print_board(board_player_1,size)
+
+
+def mark(board_player_1, board_player_2):
+    print('''You have three kinds of ships.
+    3 * X
+    2 * XX
+    1 * XXX
+    Please mark the ships on the board\n''')
+    player1 = True
+    if player1 == True:
+        print("Player 1")
+        print_board(board_player_1,size)
+        ask_for_single_ship(board_player_1)
+        ask_for_double_ship(board_player_1)
+        ask_for_triple_ship(board_player_1)
+        print("Player 1")
+        clear()
+        player1 = False
+        player2 = True
+            
+    if player2 == True:
+        print("Player 2")
+        print_board(board_player_2,size)
+        ask_for_single_ship(board_player_2)
+        ask_for_double_ship(board_player_2)
+        ask_for_triple_ship(board_player_2)
+        print("Player 2")
+        clear()        
+    return board_player_1, board_player_2
 
 
 def clear():  # NIKT
@@ -136,13 +192,12 @@ def size_of_the_board():
 
 
 def main_menu():
-    size_of_the_board()
     size = size_of_the_board()
-    board = generation_board(size)
-    ask_for_ship()
+    board_player_1 = generation_board(size)
+    board_player_2 = generation_board(size)
+    mark(board_player_1,board_player_2)
     clear()
     print("Spot your batleship")
-    ask_for_ship()
     clear()
 
 
