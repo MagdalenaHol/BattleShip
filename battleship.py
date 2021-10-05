@@ -77,8 +77,12 @@ def ask_for_single_ship(board):
             print("This spot is occupied by batleship. Please spot again: ")
             ask_for_single_ship(board)
         else:
-            board[row_selected][col_selected] = "X"
-            print_board(board_player_1,size)           
+            if board[row_selected][col_selected] != "X":
+                if board[row_selected + 1][col_selected] != "X":
+                    if board[row_selected][col_selected - 1] != "X":
+                        if board[row_selected][col_selected + 1] != "X":
+                            board[row_selected][col_selected] = "X"
+                            print_board(board_player_1, size)           
 
 def ask_for_double_ship(board):
     double_ship = 2
