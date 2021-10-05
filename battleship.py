@@ -58,6 +58,35 @@ def quit_game(user_input):
         exit()
 
 
+def player():  # Denys
+    pass
+
+
+def get_player_board_position():
+    row = input("Enter a ship row: ", row_selected)
+    while row not in row_selected:
+        print("Please enter a valid row")
+        row = input("Enter a ship row: ", row_selected)
+    col = input("Enter a ship row: ", col_selected)
+    while col not in col_selected:
+        print("Please enter a valid col")
+        col = input("Enter a ship row: ", col_selected)
+
+
+def ask_for_ship(board):
+    for ship in range(5):
+        print("Enter your ships positions: ", ship + 1)
+        row_selected, col_selected = get_player_board_position()
+        if board[row_selected][col_selected] == "X":
+            print("This spot is occupied by batleship. Please spot again: ", ship + 1)
+        else:
+            board[row_selected][col_selected] = "X"
+            print(board)
+
+
+>>>>>> > d0573ad6c74de063736ed34f492521fb7a358635
+
+
 def mark():  # Magda
     pass
 
@@ -140,6 +169,19 @@ def size_of_the_board():
 def main_menu():
     size_of_the_board()
 
+
+<< << << < HEAD
+
+== == == =
+ask_for_ship()
+clear()
+print("Spot your batleship")
+ask_for_ship()
+clear()
+get_player_board_position()
+
+
+>>>>>> > d0573ad6c74de063736ed34f492521fb7a358635
 
 if __name__ == "__main__":
     main_menu()
