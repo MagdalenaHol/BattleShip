@@ -1,39 +1,32 @@
 import os
 import random
 
-# Generation board
-def generation_board(height, width):
+
+def generation_board(size):
     board = []
-    for i in range(height):
-        board.append(['.'] * width)
+    for i in range(size):
+        board.append(['.'] * size)
     return board
 
-# Print board 5x5 
-def print_board5_5(board):
+
+def print_board(board,size):
     char = 0
-    print('        1 2 3 4 5 ')
-    print('        v v v v v ')
-    print('       ___________')
+    i = 1
+    h = []
+    while (i <= size):
+        h.append(str(i))
+        i = i + 1
+    x = ' '.join(h)
+    print('        '+ x)
+    print('        '+'v '*size)
+    print('       '+'__'*size)
     for element in board:
         char += 1
         element = ' '.join(element)
         print(chr(char + 64).rjust(2), "=>", "|", element, "|")
-    print('       -----------')
+    print('       '+'--'*size)
     return board
 
-# Print board 10x10
-def print_board10_10(board):
-    char = 0
-    print('        1 2 3 4 5 6 7 8 9 10')
-    print('        v v v v v v v v v v')
-    print('       ____________________')
-    for element in board:
-        char += 1
-        element = ' '.join(element)
-        print(chr(char + 64).rjust(2), "=>", "|", element, "|")
-    print('       --------------------')
-
-coordinates_dict = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5}
 
 # logic ai Player
 def ai_player(coordinates):
@@ -43,42 +36,18 @@ def ai_player(coordinates):
     col = int(bot_move[1])
     return row, col-1
 
-# Player
-def player(used_coordinates, coordinates):
-    user_input = validate()
-    row = int(coordinates_dict[user_input[0]])
-    col = int(user_input[1])
-    return row, col-1
-
-# Exit Game
-def quit_game(user_input):
-    if user_input.upper() == "QUIT":
-        print("Goodbye")
-        exit()
-
-
-# 
-def get_player_board_position():
-    row = input("Enter a ship row: ", row_selected)
-    while row not in row_selected:
-        print("Please enter a valid row")
-        row = input("Enter a ship row: ", row_selected)
-    col = input("Enter a ship row: ", col_selected)
-    while col not in col_selected:
-        print("Please enter a valid col")
-        col = input("Enter a ship row: ", col_selected)
-
-
-def ask_for_ship(board):
-    for ship in range(5):
-        print("Enter your ships positions: ", ship + 1)
-        row_selected, col_selected = get_player_board_position()
-        if board[row_selected][col_selected] == "X":
-            print("This spot is occupied by batleship. Please spot again: ", ship + 1)
-        else:
-            board[row_selected][col_selected] = "X"
-            print(board)
-
+def player():
+    a = True
+    while a:
+        row = input("Select a letter: ").upper()
+        if row.isalpha():
+            a = False
+    b = True     
+    while b:
+        col = input("Select a number: ")
+        if col.isnumeric():
+            b = False
+    return row, col
 
 def set_of_coordinates(row_selected, col_selected):
     options_to_choose = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5, "G": 6, "H": 7, "I": 8, "J": 9,
@@ -87,18 +56,27 @@ def set_of_coordinates(row_selected, col_selected):
     col = options_to_choose[col_selected]
     return row, col
 
-
-def select_coordinates(board, row, col):
+def select_coordinates():
     cell_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-    row_selected = input("Select a letter ").upper()
-    col_selected = input("Select a number ")
+    row_selected,col_selected = player()
     if row_selected and col_selected in cell_list:
         row, col = set_of_coordinates(row_selected, col_selected)
         return row, col
     else:
         print("Invalid input! You must select a cell on the board")
-        select_coordinates(board, row, col)
-        
+        select_coordinates()
+
+
+def ask_for_ship(board):
+    for ship in range(5):
+        print("Enter your ships positions: ", ship + 1)
+        row_selected, col_selected = select_coordinates()
+        if board[row_selected][col_selected] == "X":
+            print("This spot is occupied by batleship. Please spot again: ", ship + 1)
+        else:
+            board[row_selected][col_selected] = "X"
+            print(board)
+       
 def mark():  # Magda
     pass
 
@@ -139,36 +117,33 @@ def shooting_phase(board, row, col, height, width):  # Vładek
         print("You've hit a ship!")
         print_board(board_for_note_player_2)
 
-
+def quit_game(user_input):
+    if user_input.upper() == "QUIT":
+        print("Goodbye")
+        exit()
 def battleship():
     pass
 
 
 def size_of_the_board():
-    print('    Select board size:\n')
-    size = input('''    1 = Board size 5x5
-    2 = Board size 10x10 \n
-    Your choice: ''')
-    clear()
-    if size == '1':
-        board = generation_board(5, 5)
-        print_board5_5(board)
-    elif size == '2':
-        board = generation_board(10, 10)
-        print_board10_10(board)
+    print('    Select board size')
+    size = int(input('Specify the map size from 5 to 10: '))
+    if size >= 5 and size <=10:
+        return size
     else:
-        print('Choose one of the following options!!!')
+        print('Wrong map size, please enter corect map size!')
         size_of_the_board()
 
 
 def main_menu():
     size_of_the_board()
+    size = size_of_the_board()
+    board = generation_board(size)
     ask_for_ship()
     clear()
     print("Spot your batleship")
     ask_for_ship()
     clear()
-    get_player_board_position()
 
 
 if __name__ == "__main__":
