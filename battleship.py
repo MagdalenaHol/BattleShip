@@ -1,5 +1,6 @@
 import os
-
+import time
+import graphic
 def generation_board(size):
     board = []
     for i in range(size):
@@ -26,16 +27,14 @@ def print_board(board,size):
     return board
 
 def player():
-    a = True
-    while a:
+    while True:
         row = input("Select a letter: ").upper()
         if row.isalpha():
-            a = False
-    b = True     
-    while b:
+            break
+    while True:
         col = input("Select a number: ")
         if col.isnumeric():
-            b = False
+            break
     return row, col
 
 def set_of_coordinates(row_selected, col_selected):
@@ -47,8 +46,8 @@ def set_of_coordinates(row_selected, col_selected):
 
 def select_coordinates():
     cell_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-    row_selected,col_selected = player()
-    if row_selected and col_selected in cell_list:
+    row_selected, col_selected = player()
+    if row_selected in cell_list and col_selected in cell_list:
         row, col = set_of_coordinates(row_selected, col_selected)
         return row, col
     else:
@@ -129,6 +128,17 @@ def ask_for_single_ship(board, single_ship, i, size):
             print_board(board, size)
             ask_for_single_ship(board, single_ship, i, size)
 
+def validation():
+    b = True     
+    while b:
+        num = input("1 or 2: ")
+        if num.isnumeric():
+            if num >'2' or num < '1':
+                print('Enter the correct value')
+            else:
+                b = False
+    return num
+
 def ask_for_double_ship(board):
     z = 0
     print("Settle the waters with your two destroyers that take up two grids each !")
@@ -136,19 +146,26 @@ def ask_for_double_ship(board):
         print('''Whether the vessel is to be placed horizontally or vertically ?
    1 = Horizontally
    2 = Vertical ''')
-        a = int(input("1 or 2: "))
-        row_selected,col_selected = select_position(board)
-        if a == 1:
-            board[row_selected][col_selected] = "X"
-            board[row_selected][col_selected+1] = "X"
-            z +=1
-            print_board(board, size)
-        elif a == 2:
-            board[col_selected][row_selected] = "X"
-            board[col_selected+1][row_selected] = "X"
-            z +=1
-            print_board(board, size)           
-
+        direction_number = validation()
+        row_selected, col_selected = select_position(board)
+        if direction_number == '1':
+            if col_selected < size -1 :
+                board[row_selected][col_selected] = "X"
+                board[row_selected][col_selected+1] = "X"
+                z +=1
+                print_board(board, size)
+            else:
+                print("Wrong ship's location, My Lord.")
+                print_board(board, size)
+        elif direction_number == '2':
+            if row_selected < size -1:
+                board[row_selected][col_selected] = "X"
+                board[row_selected+1][col_selected] = "X"
+                z +=1
+                print_board(board, size)  
+            else:
+                print("Wrong ship's location, My Lord.")
+                print_board(board, size)
 def ask_for_triple_ship(board):  
     print_board(board, size)
     print("""Your aircraft carrier is waiting for you, show it to its launching point! 
@@ -156,18 +173,30 @@ def ask_for_triple_ship(board):
     print('''Whether the vessel is to be placed horizontally or vertically ?
    1 = Horizontally
    2 = Vertical ''')
-    a = int(input("1 or 2: "))
-    row_selected, col_selected=select_position(board)
-    if a == 1:
-        board[row_selected][col_selected] = "X"
-        board[row_selected][col_selected+1] = "X"
-        board[row_selected][col_selected+2] = "X"
-        print_board(board, size)
-    if a == 2:
-        board[row_selected][col_selected] = "X"
-        board[row_selected+1][col_selected] = "X"
-        board[row_selected+2][col_selected] = "X"
-        print_board(board, size)
+    while True:
+        direction_number = validation()
+        row_selected, col_selected=select_position(board)
+        if direction_number == '1':
+            if col_selected < size -1 and col_selected < size -2:
+                board[row_selected][col_selected] = "X"
+                board[row_selected][col_selected+1] = "X"
+                board[row_selected][col_selected+2] = "X"
+                print_board(board, size)
+                break
+            else:
+                print("Wrong ship's location, My Lord.")
+                print_board(board, size)
+
+        if direction_number == '2':
+            if row_selected < size -1 and row_selected < size -2:
+                board[row_selected][col_selected] = "X"
+                board[row_selected+1][col_selected] = "X"
+                board[row_selected+2][col_selected] = "X"
+                print_board(board, size)
+                break
+            else:
+                print("Wrong ship's location, My Lord.")
+                print_board(board, size)
 
 
 def mark(board_player_1, board_player_2):
@@ -184,10 +213,12 @@ def mark(board_player_1, board_player_2):
         ask_for_double_ship(board_player_1)
         ask_for_triple_ship(board_player_1)
         print("Player 1")
+        time.sleep(5)
         clear()
         player1 = False
         player2 = True
-            
+
+
     if player2 == True:
         print("Player 2")
         print_board(board_player_2, size)
@@ -195,7 +226,8 @@ def mark(board_player_1, board_player_2):
         ask_for_double_ship(board_player_2)
         ask_for_triple_ship(board_player_2)
         print("Player 2")
-        clear()        
+        time.sleep(5)
+        clear()    
     return board_player_1, board_player_2
 
 
@@ -237,33 +269,30 @@ def shooting_phase(player1, player2):
             win(board_for_note_player_2)
     shooting_phase(player1, player2)
 
-
 def win(board):
-    list_of_hitting = []
+    sum = 0
     for row in board:
         for i in row:
             if i == "H":
-                list_of_hitting.append(i)
-    a = 0
-    for i in range(len(list_of_hitting)):
-        a = i
-    if a == 9:
+                sum = sum + 1
+    if sum == 10:
         print("\n\n\n  YOU WIN!\n\n\n")
         exit()
-
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def size_of_the_board():
-    print('    Select board size')
-    size = int(input('Specify the map size from 5 to 10: '))
-    if size >= 5 and size <=10:
-        return size
-    else:
-        print('Wrong map size, please enter corect map size!')
-        size_of_the_board()
+    print('    Select board size') 
+    while True:
+        num = input("Specify the map size from 5 to 10: ")
+        if num.isnumeric():
+            if num >= '5' or num <='10':
+                a = num
+                return int(a)
+            else:
+                print('Enter the correct value!')
 
 def select_position(board):
     
@@ -276,8 +305,12 @@ def select_position(board):
             print("\nThis spot is occupied by batleship. Please spot again\n")
             print_board(board, size)
 
-
+def graphic_ship():
+    graphic.ship
+    time.sleep(3)
+    clear()
 if __name__ == "__main__":
+    graphic_ship()
     player1 = True
     player2 = False
     i = 0
