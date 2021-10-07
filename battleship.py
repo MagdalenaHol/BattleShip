@@ -1,6 +1,9 @@
 import os
 import time
 import graphic
+import entrance
+
+
 def generation_board(size):
     board = []
     for i in range(size):
@@ -8,7 +11,7 @@ def generation_board(size):
     return board
 
 
-def print_board(board,size):
+def print_board(board, size):
     char = 0
     i = 1
     h = []
@@ -16,7 +19,7 @@ def print_board(board,size):
         h.append(str(i))
         i = i + 1
     x = ' '.join(h)
-    print('        '+ x)
+    print('        ' + x)
     print('        '+'v '*size)
     print('       '+'__'*size)
     for element in board:
@@ -25,6 +28,7 @@ def print_board(board,size):
         print(chr(char + 64).rjust(2), "=>", "|", element, "|")
     print('       '+'--'*size)
     return board
+
 
 def player():
     while True:
@@ -37,15 +41,18 @@ def player():
             break
     return row, col
 
+
 def set_of_coordinates(row_selected, col_selected):
     options_to_choose = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5, "G": 6, "H": 7, "I": 8, "J": 9,
-     "1": 0, "2": 1, "3": 2, "4": 3, "5": 4, "6": 5, "7": 6, "8": 7, "9": 8, "10": 9}
+                         "1": 0, "2": 1, "3": 2, "4": 3, "5": 4, "6": 5, "7": 6, "8": 7, "9": 8, "10": 9}
     row = options_to_choose[row_selected]
     col = options_to_choose[col_selected]
     return row, col
 
+
 def select_coordinates():
-    cell_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+    cell_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I",
+                 "J", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
     row_selected, col_selected = player()
     if row_selected in cell_list and col_selected in cell_list:
         row, col = set_of_coordinates(row_selected, col_selected)
@@ -60,7 +67,7 @@ def select_coordinates():
 def ask_for_single_ship(board, single_ship, i, size):
     if i <= 2:
         print("Deploy", single_ship, "single ships")
-        row_selected, col_selected=select_position(board)
+        row_selected, col_selected = select_position(board)
         if board[row_selected-1][col_selected] != "X":
             if row_selected + 1 == size:
                 if board[row_selected][col_selected - 1] != "X":
@@ -106,12 +113,14 @@ def ask_for_single_ship(board, single_ship, i, size):
                                 print_board(board, size)
                                 i += 1
                                 single_ship -= 1
-                                ask_for_single_ship(board, single_ship, i, size)
+                                ask_for_single_ship(
+                                    board, single_ship, i, size)
                             else:
                                 clear()
                                 print("\nНou can't put a ship here! Try again\n")
                                 print_board(board, size)
-                                ask_for_single_ship(board, single_ship, i, size)
+                                ask_for_single_ship(
+                                    board, single_ship, i, size)
                     else:
                         clear()
                         print("\nНou can't put a ship here! Try again\n")
@@ -128,16 +137,18 @@ def ask_for_single_ship(board, single_ship, i, size):
             print_board(board, size)
             ask_for_single_ship(board, single_ship, i, size)
 
+
 def validation():
-    b = True     
+    b = True
     while b:
         num = input("1 or 2: ")
         if num.isnumeric():
-            if num >'2' or num < '1':
+            if num > '2' or num < '1':
                 print('Enter the correct value')
             else:
                 b = False
     return num
+
 
 def ask_for_double_ship(board):
     z = 0
@@ -149,24 +160,26 @@ def ask_for_double_ship(board):
         direction_number = validation()
         row_selected, col_selected = select_position(board)
         if direction_number == '1':
-            if col_selected < size -1 :
+            if col_selected < size - 1:
                 board[row_selected][col_selected] = "X"
                 board[row_selected][col_selected+1] = "X"
-                z +=1
+                z += 1
                 print_board(board, size)
             else:
                 print("Wrong ship's location, My Lord.")
                 print_board(board, size)
         elif direction_number == '2':
-            if row_selected < size -1:
+            if row_selected < size - 1:
                 board[row_selected][col_selected] = "X"
                 board[row_selected+1][col_selected] = "X"
-                z +=1
-                print_board(board, size)  
+                z += 1
+                print_board(board, size)
             else:
                 print("Wrong ship's location, My Lord.")
                 print_board(board, size)
-def ask_for_triple_ship(board):  
+
+
+def ask_for_triple_ship(board):
     print_board(board, size)
     print("""Your aircraft carrier is waiting for you, show it to its launching point! 
     Remember that it occupies 3 grids on your map!""")
@@ -175,9 +188,9 @@ def ask_for_triple_ship(board):
    2 = Vertical ''')
     while True:
         direction_number = validation()
-        row_selected, col_selected=select_position(board)
+        row_selected, col_selected = select_position(board)
         if direction_number == '1':
-            if col_selected < size -1 and col_selected < size -2:
+            if col_selected < size - 1 and col_selected < size - 2:
                 board[row_selected][col_selected] = "X"
                 board[row_selected][col_selected+1] = "X"
                 board[row_selected][col_selected+2] = "X"
@@ -188,7 +201,7 @@ def ask_for_triple_ship(board):
                 print_board(board, size)
 
         if direction_number == '2':
-            if row_selected < size -1 and row_selected < size -2:
+            if row_selected < size - 1 and row_selected < size - 2:
                 board[row_selected][col_selected] = "X"
                 board[row_selected+1][col_selected] = "X"
                 board[row_selected+2][col_selected] = "X"
@@ -218,7 +231,6 @@ def mark(board_player_1, board_player_2):
         player1 = False
         player2 = True
 
-
     if player2 == True:
         print("Player 2")
         print_board(board_player_2, size)
@@ -227,11 +239,11 @@ def mark(board_player_1, board_player_2):
         ask_for_triple_ship(board_player_2)
         print("Player 2")
         time.sleep(5)
-        clear()    
+        clear()
     return board_player_1, board_player_2
 
 
-def shooting_phase(player1, player2):  
+def shooting_phase(player1, player2):
     print("try to shoot")
     if player1 == True:
         print("Player1")
@@ -269,6 +281,7 @@ def shooting_phase(player1, player2):
             win(board_for_note_player_2)
     shooting_phase(player1, player2)
 
+
 def win(board):
     sum = 0
     for row in board:
@@ -279,23 +292,26 @@ def win(board):
         print("\n\n\n  YOU WIN!\n\n\n")
         exit()
 
+
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def size_of_the_board():
-    print('    Select board size') 
+    import vhod
+    print('    Select board size')
     while True:
         num = input("Specify the map size from 5 to 10: ")
         if num.isnumeric():
-            if num >= '5' or num <='10':
+            if num >= '5' or num <= '10':
                 a = num
                 return int(a)
             else:
                 print('Enter the correct value!')
 
+
 def select_position(board):
-    
+
     while True:
         row_selected, col_selected = select_coordinates()
         if board[row_selected][col_selected] != "X":
@@ -305,10 +321,13 @@ def select_position(board):
             print("\nThis spot is occupied by batleship. Please spot again\n")
             print_board(board, size)
 
+
 def graphic_ship():
     graphic.ship
     time.sleep(3)
     clear()
+
+
 if __name__ == "__main__":
     graphic_ship()
     player1 = True
@@ -325,7 +344,6 @@ if __name__ == "__main__":
     # clear()
     # print("Spot your batleship")
     # clear()
-
 
 
 # if input == "vertical":
