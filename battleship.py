@@ -1,5 +1,4 @@
 import os
-import random
 
 def generation_board(size):
     board = []
@@ -25,15 +24,6 @@ def print_board(board,size):
         print(chr(char + 64).rjust(2), "=>", "|", element, "|")
     print('       '+'--'*size)
     return board
-
-
-# logic ai Player
-def ai_player(coordinates):
-    bot_move = random.choice(coordinates)
-    coordinates.remove(bot_move)
-    row = int(coordinates_dict[bot_move[0]])
-    col = int(bot_move[1])
-    return row, col-1
 
 def player():
     a = True
@@ -66,50 +56,118 @@ def select_coordinates():
         select_coordinates()
 
 
-def ask_for_single_ship(board):
-    single_ship = 3
-    for i in range(single_ship):
+# Poniżej widzimy pomnik ludzi światłych i wspaniałych, ludzi którzy pomimo mroku dziejów przebrneli przez bagno
+# życia by dotrzeć do momentu w którym się znaleźli. Dzięki tym ludziom powstał ten oto fragemnt kodu !!!
+def ask_for_single_ship(board, single_ship, i, size):
+    if i <= 2:
         print("Deploy", single_ship, "single ships")
-        single_ship -= 1
-        print("Enter your ships positions: ")
-        row_selected, col_selected = select_coordinates()
-        if board[row_selected][col_selected] == "X":
-            print("This spot is occupied by batleship. Please spot again: ")
-            ask_for_single_ship(board)
-        else:
-            if board[row_selected][col_selected] != "X":
-                if board[row_selected + 1][col_selected] != "X":
-                    if board[row_selected][col_selected - 1] != "X":
+        row_selected, col_selected=select_position(board)
+        if board[row_selected-1][col_selected] != "X":
+            if row_selected + 1 == size:
+                if board[row_selected][col_selected - 1] != "X":
+                    if col_selected + 1 == size:
+                        board[row_selected][col_selected] = "X"
+                        clear()
+                        print_board(board, size)
+                        i += 1
+                        single_ship -= 1
+                        ask_for_single_ship(board, single_ship, i, size)
+                    else:
                         if board[row_selected][col_selected + 1] != "X":
                             board[row_selected][col_selected] = "X"
-                            print_board(board_player_1, size)           
+                            clear()
+                            print_board(board, size)
+                            i += 1
+                            single_ship -= 1
+                            ask_for_single_ship(board, single_ship, i, size)
+                        else:
+                            clear()
+                            print("\nНou can't put a ship here! Try again\n")
+                            print_board(board, size)
+                            ask_for_single_ship(board, single_ship, i, size)
+                else:
+                    clear()
+                    print("\nНou can't put a ship here! Try again\n")
+                    print_board(board, size)
+                    ask_for_single_ship(board, single_ship, i, size)
+            else:
+                if board[row_selected + 1][col_selected] != "X":
+                    if board[row_selected][col_selected - 1] != "X":
+                        if col_selected + 1 == size:
+                            board[row_selected][col_selected] = "X"
+                            clear()
+                            print_board(board, size)
+                            i += 1
+                            single_ship -= 1
+                            ask_for_single_ship(board, single_ship, i, size)
+                        else:
+                            if board[row_selected][col_selected + 1] != "X":
+                                board[row_selected][col_selected] = "X"
+                                clear()
+                                print_board(board, size)
+                                i += 1
+                                single_ship -= 1
+                                ask_for_single_ship(board, single_ship, i, size)
+                            else:
+                                clear()
+                                print("\nНou can't put a ship here! Try again\n")
+                                print_board(board, size)
+                                ask_for_single_ship(board, single_ship, i, size)
+                    else:
+                        clear()
+                        print("\nНou can't put a ship here! Try again\n")
+                        print_board(board, size)
+                        ask_for_single_ship(board, single_ship, i, size)
+                else:
+                    clear()
+                    print("\nНou can't put a ship here! Try again\n")
+                    print_board(board, size)
+                    ask_for_single_ship(board, single_ship, i, size)
+        else:
+            clear()
+            print("\nНou can't put a ship here! Try again\n")
+            print_board(board, size)
+            ask_for_single_ship(board, single_ship, i, size)
 
 def ask_for_double_ship(board):
-    double_ship = 2
-    for i in range(double_ship):
-        print("Deploy", double_ship, "double ships")
-        double_ship -= 1
-        print("Enter your ships positions: ")
-        row_selected, col_selected = select_coordinates()
-        if board[row_selected][col_selected] == "X":
-            print("This spot is occupied by batleship. Please spot again: ")
-            ask_for_double_ship(board)
-        else:
+    z = 0
+    print("Settle the waters with your two destroyers that take up two grids each !")
+    while z != 2:
+        print('''Whether the vessel is to be placed horizontally or vertically ?
+   1 = Horizontally
+   2 = Vertical ''')
+        a = int(input("1 or 2: "))
+        row_selected,col_selected = select_position(board)
+        if a == 1:
             board[row_selected][col_selected] = "X"
-            print_board(board_player_1,size)
+            board[row_selected][col_selected+1] = "X"
+            z +=1
+            print_board(board, size)
+        elif a == 2:
+            board[col_selected][row_selected] = "X"
+            board[col_selected+1][row_selected] = "X"
+            z +=1
+            print_board(board, size)           
 
 def ask_for_triple_ship(board):  
-    triple_ship = 1
-    for i in range(triple_ship):
-        print('Deploy 1 single ship')
-        print("Enter your ships positions: ")
-        row_selected, col_selected = select_coordinates()
-        if board[row_selected][col_selected] == "X":
-            print("This spot is occupied by batleship. Please spot again: ")
-            ask_for_triple_ship(board)
-        else:
-            board[row_selected][col_selected] = "X"
-            print_board(board_player_1,size)
+    print_board(board, size)
+    print("""Your aircraft carrier is waiting for you, show it to its launching point! 
+    Remember that it occupies 3 grids on your map!""")
+    print('''Whether the vessel is to be placed horizontally or vertically ?
+   1 = Horizontally
+   2 = Vertical ''')
+    a = int(input("1 or 2: "))
+    row_selected, col_selected=select_position(board)
+    if a == 1:
+        board[row_selected][col_selected] = "X"
+        board[row_selected][col_selected+1] = "X"
+        board[row_selected][col_selected+2] = "X"
+        print_board(board, size)
+    if a == 2:
+        board[row_selected][col_selected] = "X"
+        board[row_selected+1][col_selected] = "X"
+        board[row_selected+2][col_selected] = "X"
+        print_board(board, size)
 
 
 def mark(board_player_1, board_player_2):
@@ -121,8 +179,8 @@ def mark(board_player_1, board_player_2):
     player1 = True
     if player1 == True:
         print("Player 1")
-        print_board(board_player_1,size)
-        ask_for_single_ship(board_player_1)
+        print_board(board_player_1, size)
+        ask_for_single_ship(board_player_1, single_ship, i, size)
         ask_for_double_ship(board_player_1)
         ask_for_triple_ship(board_player_1)
         print("Player 1")
@@ -132,8 +190,8 @@ def mark(board_player_1, board_player_2):
             
     if player2 == True:
         print("Player 2")
-        print_board(board_player_2,size)
-        ask_for_single_ship(board_player_2)
+        print_board(board_player_2, size)
+        ask_for_single_ship(board_player_2, single_ship, i, size)
         ask_for_double_ship(board_player_2)
         ask_for_triple_ship(board_player_2)
         print("Player 2")
@@ -141,48 +199,61 @@ def mark(board_player_1, board_player_2):
     return board_player_1, board_player_2
 
 
-def clear():  # NIKT
-    os.system('cls' if os.name == 'nt' else 'clear')
+def shooting_phase(player1, player2):  
+    print("try to shoot")
+    if player1 == True:
+        print("Player1")
+        print_board(board_for_note_player_1, size)
+        row1, col1 = select_coordinates()
+
+        if board_player_2[row1][col1] == '.':
+            board_for_note_player_1[row1][col1] = 'M'
+            print("You've missed!")
+            print_board(board_for_note_player_1, size)
+            player1 = False
+            player2 = True
+        elif board_player_2[row1][col1] == 'X':
+            board_for_note_player_1[row1][col1] = 'H'
+            print_board(board_for_note_player_1, size)
+            print("You've hit a ship!")
+            player1 = True
+            win(board_for_note_player_1)
+    elif player2 == True:
+        print("Player2")
+        print_board(board_for_note_player_2, size)
+        row1, col1 = select_coordinates()
+
+        if board_player_1[row1][col1] == '.':
+            board_for_note_player_2[row1][col1] = 'M'
+            print("You've missed!")
+            print_board(board_for_note_player_2, size)
+            player1 = True
+            player2 = False
+        elif board_player_1[row1][col1] == 'X':
+            board_for_note_player_2[row1][col1] = 'H'
+            print_board(board_for_note_player_2, size)
+            print("You've hit a ship!")
+            player2 = True
+            win(board_for_note_player_2)
+    shooting_phase(player1, player2)
 
 
-def win():  # Magda
-    pass
-
-
-def validate(board):  # Vładek
-    pass
-
-
-
-
-
-def shooting_phase(board, row, col, height, width):  # Vładek
-    board_for_note_player_1 = generation_board(height, width)
-    board_for_note_player_2 = generation_board(height, width)
-    select_coordinates(board, row, col)
-    if board_player_1[row][col] == '.':
-        board_for_note_player_1[row][col] == 'M'
-        print("You've missed!")
-        print_board(board_for_note_player_1)
-    elif board_player_1[row][col] == 'X':
-        board_for_note_player_1[row][col] == 'H'
-        print("You've hit a ship!")
-        print_board(board_for_note_player_1)
-    if board_player_2[row][col] == '.':
-        board_for_note_player_1[row][col] == 'M'
-        print("You've missed!")
-        print_board(board_for_note_player_2)
-    elif board_player_2[row][col] == 'X':
-        board_for_note_player_1[row][col] == 'H'
-        print("You've hit a ship!")
-        print_board(board_for_note_player_2)
-
-def quit_game(user_input):
-    if user_input.upper() == "QUIT":
-        print("Goodbye")
+def win(board):
+    list_of_hitting = []
+    for row in board:
+        for i in row:
+            if i == "H":
+                list_of_hitting.append(i)
+    a = 0
+    for i in range(len(list_of_hitting)):
+        a = i
+    if a == 9:
+        print("\n\n\n  YOU WIN!\n\n\n")
         exit()
-def battleship():
-    pass
+
+
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def size_of_the_board():
@@ -194,16 +265,54 @@ def size_of_the_board():
         print('Wrong map size, please enter corect map size!')
         size_of_the_board()
 
-
-def main_menu():
-    size = size_of_the_board()
-    board_player_1 = generation_board(size)
-    board_player_2 = generation_board(size)
-    mark(board_player_1,board_player_2)
-    clear()
-    print("Spot your batleship")
-    clear()
+def select_position(board):
+    
+    while True:
+        row_selected, col_selected = select_coordinates()
+        if board[row_selected][col_selected] != "X":
+            return row_selected, col_selected
+        else:
+            clear()
+            print("\nThis spot is occupied by batleship. Please spot again\n")
+            print_board(board, size)
 
 
 if __name__ == "__main__":
-    main_menu()
+    player1 = True
+    player2 = False
+    i = 0
+    single_ship = 3
+    size = size_of_the_board()
+    board_player_1 = generation_board(size)
+    board_player_2 = generation_board(size)
+    board_for_note_player_1 = generation_board(size)
+    board_for_note_player_2 = generation_board(size)
+    mark(board_player_1, board_player_2)
+    shooting_phase(player1, player2)
+    # clear()
+    # print("Spot your batleship")
+    # clear()
+
+
+
+# if input == "vertical":
+#     if board[row][col] = "X":
+#         if board[row][col] = "H":    # dla single
+#             board[row][col] = "S"
+#         if board[row][col] = "H" and board[row][col+1] = "H":   #dla double
+#             board[row][col] = "S"
+#             board[row+1][col] = "S"
+#         if board[row][col] = "H" and board[row][col+1] = "H" and board[row][col+2] = "H":    #dla triple
+#             board[row][col] = "S"
+#             board[row][col+1] = "S"
+#             board[row][col+2] = "S"
+# elif input == "horisontal":
+#     if board[row][col] = "H":   # dla single
+#         board[row][col] = "S"
+#     elif board[row][col] = "H" and board[row+1][col] = "H":   #dla double
+#         board[row][col] = "S"
+#         board[row+1][col] = "S"
+#     elif board[row][col] = "H" and board[row+1][col] = "H" and board[row+2][col] = "H":    #dla triple
+#         board[row][col] = "S"
+#         board[row+1][col] = "S"
+#         board[row+2][col] = "S"
